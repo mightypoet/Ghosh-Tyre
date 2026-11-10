@@ -1,0 +1,6 @@
+{
+  "name": "Ghosh Tyre Zone – Tyres, Batteries & Wheel Care Kolkata",
+  "description": "Trusted tyre, battery, alloy wheel, and automotive accessories retailer in Kolkata. Genuine products, expert wheel alignment, balancing, and car AC service.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
