@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
-  ClipboardList,
   Menu,
   MessageCircle,
   Phone,
@@ -15,7 +14,7 @@ import { useStore } from '../context/StoreContext';
 import { getWhatsAppUrl } from '../utils/whatsapp';
 
 export const Navbar: React.FC = () => {
-  const { cart, setIsCartDrawerOpen, categories } = useStore();
+  const { cart, categories } = useStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -300,20 +299,6 @@ export const Navbar: React.FC = () => {
             aria-label="Search Products"
           >
             <Search className="w-4 h-4" />
-          </button>
-
-          {/* Enquiry Cart Button */}
-          <button
-            type="button"
-            onClick={() => setIsCartDrawerOpen(true)}
-            className="relative flex items-center gap-2 px-3 py-2 rounded-lg bg-[#1C1D24] border border-white/10 text-white hover:border-[#F10D17]/60 transition-colors whitespace-nowrap shrink-0"
-            aria-label="Open Enquiry Cart"
-          >
-            <ClipboardList className="w-4 h-4 text-[#F10D17]" />
-            <span className="hidden sm:inline text-xs font-medium">Enquiries</span>
-            <span className="font-mono-num text-xs font-bold text-[#F10D17]">
-              ({totalEnquiryItems})
-            </span>
           </button>
 
           {/* WhatsApp Button */}
