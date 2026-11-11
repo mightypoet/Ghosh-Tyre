@@ -202,8 +202,8 @@ export const INITIAL_BANNERS: PromotionalBanner[] = [
   },
 ];
 
+// 24 Sample Products across all categories
 export const INITIAL_PRODUCTS: Product[] = [
-  // AUDIO & VIDEO (Directly inspired by reference screenshot + expanded catalogue)
   {
     id: 'prod-speakers-coaxial',
     sku: 'GTZ-AUD-101',
@@ -219,6 +219,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Upgrade your factory cabin acoustics with high-clarity 2-way coaxial car speakers. Designed for direct door mounting across popular Indian hatchbacks, sedans, and compact SUVs, delivering crisp highs and punchy mid-bass without distortion.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: true,
     isBestseller: true,
@@ -248,6 +249,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Modernize your dashboard with this responsive in-dash touchscreen video and multimedia console. Supports Bluetooth audio streaming, hands-free calling, USB playback, steering wheel control integration, and automatic rear-view camera display.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: true,
     isBestseller: true,
@@ -277,6 +279,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Engineered for drivers who appreciate clean vocal staging and deep bass definition. Includes two 6.5-inch mid-bass drivers, two flush-mount silk dome tweeters, and passive crossovers.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: true,
     images: ['/assets/aistudio/image_f3b889b3.png'],
@@ -288,7 +291,6 @@ export const INITIAL_PRODUCTS: Product[] = [
     },
     createdAt: '2026-10-03T10:00:00Z',
   },
-  // TYRES - CAR / SUV / TWO WHEELER / COMMERCIAL
   {
     id: 'prod-michelin-primacy-4st',
     sku: 'GTZ-TYR-201',
@@ -304,6 +306,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'The Michelin Primacy 4 ST is engineered for exceptional safety from the first kilometre to the last. Featuring EverGrip technology and optimized tread grooves, it provides confident wet braking during Kolkata monsoons while keeping cabin road noise remarkably low.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: true,
     isBestseller: true,
@@ -342,6 +345,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Bridgestone Sturdo is specifically developed for Indian road conditions. Its special tread compound resists premature wear while large center blocks maintain confident dry and wet grip across daily city commutes.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: true,
     images: ['/assets/aistudio/image_f3b889b3.png'],
@@ -377,6 +381,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Designed for modern SUVs and crossovers, the Apollo Apterra HT2 features four wide circumferential grooves for rapid water dispersion and high-stiffness shoulder blocks for confident highway cornering and braking.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: true,
     images: ['/assets/aistudio/image_f3b889b3.png'],
@@ -412,6 +417,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'MRF Zapper series tyres provide dependable grip on wet and dry tarmac, tramlines, and concrete streets. Available in front and rear fitments for motorcycles and scooters.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: false,
     images: ['/assets/aistudio/image_f3b889b3.png'],
@@ -446,6 +452,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Engineered for light commercial vehicles (LCVs), goods carriers, and passenger fleet vehicles operating across West Bengal. Heavy-duty bead construction and heat-resistant compound ensure reliability under full load.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: false,
     images: ['/assets/aistudio/image_f3b889b3.png'],
@@ -480,6 +487,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Featuring Goodyear HydroTred technology, the Assurance TripleMax 2 improves wet road grip and steering responsiveness while protecting against pothole pinch-shock damage.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: false,
     images: ['/assets/aistudio/image_f3b889b3.png'],
@@ -514,6 +522,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Built for SUVs that travel beyond city limits. Staggered tread blocks eject mud and gravel while maintaining stable straight-line tracking on highways.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: false,
     images: ['/assets/aistudio/image_f3b889b3.png'],
@@ -533,8 +542,6 @@ export const INITIAL_PRODUCTS: Product[] = [
     },
     createdAt: '2026-10-08T14:00:00Z',
   },
-
-  // BATTERIES
   {
     id: 'prod-exide-mileage-car',
     sku: 'GTZ-BAT-301',
@@ -550,6 +557,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Exide Mileage batteries offer dependable cold and warm starting power with double-clad separation for high vibration resistance. We provide instant battery testing, old battery exchange valuation, and professional terminal installation at our Kolkata store.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: true,
     isBestseller: true,
@@ -578,6 +586,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Amaron FLO batteries feature patented BIC vents for enhanced safety and minimal electrolyte loss. Ideal for modern cars equipped with heavy infotainment, AC, and electronic systems.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: true,
     images: ['/assets/aistudio/image_f3b889b3.png'],
@@ -604,6 +613,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Built to handle bumpy city roads and frequent stop-go traffic, the Exide Xplore VRLA battery delivers reliable cranking power for scooters and motorcycles with zero acid spill risk.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: false,
     images: ['/assets/aistudio/image_f3b889b3.png'],
@@ -615,8 +625,6 @@ export const INITIAL_PRODUCTS: Product[] = [
     },
     createdAt: '2026-10-11T10:00:00Z',
   },
-
-  // ALLOY WHEELS
   {
     id: 'prod-alloy-diamond-cut-16',
     sku: 'GTZ-WHL-401',
@@ -632,6 +640,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Transform your vehicle stance and handling with precision-balanced alloy wheels. Available in 14", 15", 16", 17", and 18" rim diameters across 4-lug and 5-lug PCD bolt patterns. Includes computerized wheel balancing during installation.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: true,
     isBestseller: true,
@@ -649,8 +658,6 @@ export const INITIAL_PRODUCTS: Product[] = [
     additionalInfo: 'Visit our showroom or message us on WhatsApp with your car model to preview compatible alloy designs in your exact PCD.',
     createdAt: '2026-10-12T10:00:00Z',
   },
-
-  // ACCESSORIES, DETAILING, EXTERIOR, INTERIOR, PARTS, TOOLS
   {
     id: 'prod-sun-control-film',
     sku: 'GTZ-EXT-501',
@@ -666,6 +673,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Keep your car cabin noticeably cooler during Kolkata summers while easing the load on your air conditioning system. Installed indoors by experienced applicators for a bubble-free, optically clear finish.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: true,
     isBestseller: true,
@@ -693,6 +701,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Protect your vehicle paintwork against acid rain, UV fading, bird droppings, and road grime with genuine Sonax Ceramic Coating. Includes multi-stage paint decontamination, machine polishing, and ceramic layer curing.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: true,
     images: ['/assets/aistudio/image_6aa2fd52.png'],
@@ -719,6 +728,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Essential for safe braking performance in dense city traffic. Prevents vapor lock under repeated braking and protects master cylinders, calipers, and ABS valves against moisture corrosion.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: false,
     isNewArrival: true,
@@ -745,6 +755,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Built with overload, short-circuit, and thermal cutoff protection. Ideal for running car vacuum cleaners, tyre inflators, dashcams, and mobile electronics safely.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: false,
     isNewArrival: true,
@@ -771,6 +782,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Reduces driver elbow fatigue during long commutes and highway journeys. Custom-molded base fits securely over the center console without drilling into the vehicle floor.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: false,
     isNewArrival: true,
@@ -797,6 +809,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Record every journey with crisp day and night video evidence. Features automatic incident lock via built-in G-sensor, wide dynamic range for night license plate clarity, and concealed pillar wiring installation at our workshop.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: true,
     isNewArrival: true,
@@ -823,6 +836,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Eliminate boot clutter and rolling items while driving. Features reinforced base plates, divided compartments, mesh side pockets, and non-slip base strips.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: false,
     images: ['/assets/aistudio/image_f3b889b3.png'],
@@ -848,6 +862,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Keep your car interior fresh and welcoming without harsh chemical sprays. Available in Musk, Ocean Breeze, Citrus, and Coffee notes.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: false,
     images: ['/assets/aistudio/image_f3b889b3.png'],
@@ -873,6 +888,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Enhances pedestrian and parking safety in narrow Kolkata lanes. Sealed ABS housing resists water splash and dust.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: false,
     isNewArrival: true,
@@ -899,6 +915,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description:
       'Never get stranded with a low tyre on highway drives. Preset your target PSI on the backlit digital gauge and the metal-cylinder pump automatically stops once inflated.',
     price: null,
+    contactForPrice: true,
     availability: 'In Stock',
     featured: true,
     images: ['/assets/aistudio/image_f3b889b3.png'],
@@ -908,6 +925,119 @@ export const INITIAL_PRODUCTS: Product[] = [
       'Features': 'Auto Cut-Off Digital PSI Gauge + LED Light',
     },
     createdAt: '2026-10-22T10:00:00Z',
+  },
+  {
+    id: 'prod-ceat-securadrive-suv',
+    sku: 'GTZ-TYR-208',
+    name: 'CEAT SecuraDrive SUV Tubeless Radial Tyre',
+    slug: 'ceat-securadrive-suv-tubeless-tyre',
+    brand: 'CEAT',
+    category: 'Tyres',
+    categorySlug: 'tyres',
+    subCategory: 'SUV Tyres',
+    vehicleTypes: ['SUV', 'Car'],
+    compatibleModels: ['Hyundai Creta', 'Kia Seltos', 'Maruti Grand Vitara', 'Toyota Hyryder', 'Tata Nexon'],
+    shortDescription: 'Chamfered shoulder blocks and wide longitudinal grooves for confident wet and dry SUV braking.',
+    description:
+      'Designed specifically for compact and mid-size urban SUVs, CEAT SecuraDrive SUV combines a quiet cabin ride with superior high-speed lane-change stability.',
+    price: null,
+    contactForPrice: true,
+    availability: 'In Stock',
+    featured: true,
+    images: ['/assets/aistudio/image_f3b889b3.png'],
+    visualType: 'tyre-suv',
+    tyreSpecs: {
+      width: '215',
+      aspectRatio: '60',
+      rimDiameter: 'R17',
+      speedRating: 'H',
+      loadIndex: '96',
+      construction: 'Tubeless Radial',
+    },
+    specifications: {
+      'Tyre Size': '215/60 R17, 205/65 R16',
+      'Construction': 'Tubeless Radial',
+      'Load Index / Speed': '96H',
+    },
+    createdAt: '2026-10-23T10:00:00Z',
+  },
+  {
+    id: 'prod-amaron-pro-rider-moto',
+    sku: 'GTZ-BAT-304',
+    name: 'Amaron Pro Bike Rider VRLA Two Wheeler Battery',
+    slug: 'amaron-pro-bike-rider-two-wheeler-battery',
+    brand: 'Amaron',
+    category: 'Batteries',
+    categorySlug: 'batteries',
+    subCategory: 'Two Wheeler Batteries',
+    vehicleTypes: ['Two Wheeler'],
+    compatibleModels: ['Royal Enfield Meteor 350', 'Bajaj Dominar', 'KTM Duke', 'TVS Ntorq', 'Suzuki Access 125'],
+    shortDescription: 'Zero-maintenance AGM VRLA motorcycle and scooter battery with superior cranking power and vibration resistance.',
+    description:
+      'Amaron Pro Bike Rider batteries use state-of-the-art AGM technology for leak-proof operation and reliable cold starts across daily urban rides.',
+    price: null,
+    contactForPrice: true,
+    availability: 'In Stock',
+    featured: false,
+    images: ['/assets/aistudio/image_f3b889b3.png'],
+    visualType: 'battery-moto',
+    specifications: {
+      'Battery Type': 'VRLA Maintenance-Free Motorcycle Battery',
+      'Fitment': 'Motorcycles & Scooters',
+    },
+    createdAt: '2026-10-24T10:00:00Z',
+  },
+  {
+    id: 'prod-alloy-wheel-accessories-kit',
+    sku: 'GTZ-WHL-402',
+    name: 'Chrome High-Tensile Anti-Theft Alloy Wheel Lug Nuts & Hub Rings Set',
+    slug: 'chrome-anti-theft-alloy-wheel-lug-nuts-kit',
+    brand: 'Precision Alloy Series',
+    category: 'Alloy Wheels',
+    categorySlug: 'alloy-wheels',
+    subCategory: 'Wheel Accessories',
+    vehicleTypes: ['Car', 'Hatchback', 'Sedan', 'SUV'],
+    compatibleModels: ['Universal Fit for 4-Lug & 5-Lug Alloy Wheels'],
+    shortDescription: 'Corrosion-resistant forged steel locking wheel nuts, aluminum hub-centric rings, and metal tubeless valves.',
+    description:
+      'Secure your aftermarket or OEM alloy wheels with precision-threaded locking lug nuts and vibration-eliminating hub-centric rings.',
+    price: null,
+    contactForPrice: true,
+    availability: 'In Stock',
+    featured: false,
+    images: ['/assets/aistudio/image_8a83cfc1.png'],
+    visualType: 'alloy-wheel',
+    specifications: {
+      'Includes': '16/20 Lug Nuts + Security Key Socket + 4 Metal Valves',
+      'Finish': 'Triple-Plated Chrome / Matte Black',
+    },
+    createdAt: '2026-10-25T10:00:00Z',
+  },
+  {
+    id: 'prod-sonax-interior-cleaner',
+    sku: 'GTZ-DET-511',
+    name: 'Sonax Xtreme Interior Detailer & Leather Care Kit',
+    slug: 'sonax-xtreme-interior-detailer-kit',
+    brand: 'Sonax',
+    category: 'Detailing',
+    categorySlug: 'detailing',
+    subCategory: 'Interior Detailing',
+    vehicleTypes: ['Car', 'Hatchback', 'Sedan', 'SUV'],
+    compatibleModels: ['All Vehicle Interiors, Leatherette & Fabric Seats'],
+    shortDescription: 'Deep-cleaning German cabin hygiene formula that removes stains, neutralizes odors, and leaves a matte anti-static finish.',
+    description:
+      'Formulated in Germany by Sonax, this interior care kit safely cleans dashboard soft-touch plastics, fabric upholstery, roof liners, and leather seats without greasy residue.',
+    price: null,
+    contactForPrice: true,
+    availability: 'In Stock',
+    featured: false,
+    images: ['/assets/aistudio/image_6aa2fd52.png'],
+    visualType: 'ceramic-coating',
+    specifications: {
+      'Brand': 'Sonax (Germany)',
+      'Application': 'Dashboard, Seats, Roof Liner & Door Trims',
+    },
+    createdAt: '2026-10-26T10:00:00Z',
   },
 ];
 
@@ -1070,6 +1200,7 @@ export const INITIAL_BLOGS: BlogArticle[] = [
     readTime: '5 min read',
     author: 'Ghosh Tyre Zone Technical Team',
     image: '/assets/aistudio/image_6aa2fd52.png',
+    isPublished: true,
     keyTakeaways: [
       'Always check cold tyre pressure including the spare wheel before highway travel.',
       'Inspect tread depth and sidewalls for cuts or bulges.',
@@ -1097,6 +1228,7 @@ export const INITIAL_BLOGS: BlogArticle[] = [
     readTime: '4 min read',
     author: 'Ghosh Tyre Zone Technical Team',
     image: '/assets/aistudio/image_f3b889b3.png',
+    isPublished: true,
     keyTakeaways: [
       'Replace tyres immediately when tread wears down to the 1.6 mm Tread Wear Indicator bars.',
       'Sidewall bulges or deep cuts cannot be safely repaired and require tyre replacement.',
@@ -1121,6 +1253,7 @@ export const INITIAL_BLOGS: BlogArticle[] = [
     readTime: '4 min read',
     author: 'Ghosh Tyre Zone Technical Team',
     image: '/assets/aistudio/image_8a83cfc1.png',
+    isPublished: true,
     keyTakeaways: [
       'Misaligned wheels drag sideways across the road, scrubbing thousands of kilometres off tyre life.',
       'Proper alignment keeps your steering centered and reduces rolling resistance.',
@@ -1144,6 +1277,7 @@ export const INITIAL_BLOGS: BlogArticle[] = [
     readTime: '5 min read',
     author: 'Ghosh Tyre Zone Technical Team',
     image: '/assets/aistudio/image_f3b889b3.png',
+    isPublished: true,
     keyTakeaways: [
       'Always match or exceed the OEM-recommended Ampere-Hour (Ah) rating and cranking power.',
       'Diesel engines and cars with upgraded audio/accessories require higher reserve capacity.',
@@ -1167,6 +1301,7 @@ export const INITIAL_BLOGS: BlogArticle[] = [
     readTime: '5 min read',
     author: 'Ghosh Tyre Zone Technical Team',
     image: '/assets/aistudio/image_f3b889b3.png',
+    isPublished: true,
     keyTakeaways: [
       'Summer heat increases internal tyre pressure; never bleed air from a hot tyre.',
       'During monsoons, clean groove channels allow water evacuation to prevent hydroplaning.',
@@ -1190,6 +1325,7 @@ export const INITIAL_BLOGS: BlogArticle[] = [
     readTime: '4 min read',
     author: 'Ghosh Tyre Zone Technical Team',
     image: '/assets/aistudio/image_6aa2fd52.png',
+    isPublished: true,
     keyTakeaways: [
       'Ceramic coating creates a semi-permanent chemical bond with automotive clear coat.',
       'Hydrophobic properties cause rainwater and mud to bead and roll off effortlessly.',

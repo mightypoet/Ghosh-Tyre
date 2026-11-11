@@ -73,7 +73,7 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  app.use(express.json({ limit: '10mb' }));
+  app.use(express.json({ limit: '15mb' }));
 
   const db = loadDatabase();
 
@@ -145,6 +145,42 @@ async function startServer() {
     res.json(removed);
   });
 
+  // Blogs CRUD
+  app.get('/api/blogs', (_req, res) => {
+    res.json(db.blogs);
+  });
+
+  app.post('/api/blogs', (req, res) => {
+    const newBlog: BlogArticle = {
+      ...req.body,
+      id: req.body.id || `blog-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+    };
+    db.blogs.unshift(newBlog);
+    saveDatabase(db);
+    res.status(201).json(newBlog);
+  });
+
+  app.put('/api/blogs/:id', (req, res) => {
+    const idx = db.blogs.findIndex((b) => b.id === req.params.id);
+    if (idx === -1) {
+      return res.status(404).json({ message: 'Blog not found' });
+    }
+    db.blogs[idx] = { ...db.blogs[idx], ...req.body, id: req.params.id };
+    saveDatabase(db);
+    res.json(db.blogs[idx]);
+  });
+
+  app.delete('/api/blogs/:id', (req, res) => {
+    const idx = db.blogs.findIndex((b) => b.id === req.params.id);
+    if (idx === -1) {
+      return res.status(404).json({ message: 'Blog not found' });
+    }
+    const removed = db.blogs.splice(idx, 1)[0];
+    saveDatabase(db);
+    res.json(removed);
+  });
+
   // Categories CRUD
   app.get('/api/categories', (_req, res) => {
     res.json(db.categories);
@@ -199,8 +235,8 @@ async function startServer() {
   app.post('/api/enquiries', (req, res) => {
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const newEnquiry: Enquiry = {
-      id: `enq-${Date.now()}`,
-      referenceNumber: `GTZ-2026-${randomNum}`,
+      id: req.body.id || `enq-${Date.now()}`,
+      referenceNumber: req.body.referenceNumber || `GTZ-2026-${randomNum}`,
       type: req.body.type || 'product',
       customerName: req.body.customerName || '',
       phone: req.body.phone || '',

@@ -5,6 +5,7 @@ import { useStore } from '../context/StoreContext';
 
 export const BlogsPage: React.FC = () => {
   const { blogs } = useStore();
+  const publishedBlogs = blogs.filter((b) => b.isPublished !== false);
 
   return (
     <div className="min-h-screen bg-[#14151B] pb-16">
@@ -25,7 +26,7 @@ export const BlogsPage: React.FC = () => {
 
       <section className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogs.map((article) => (
+          {publishedBlogs.map((article) => (
             <article
               key={article.id}
               className="bg-[#22232B] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-white/25 transition-all"

@@ -43,6 +43,7 @@ export interface Product {
   shortDescription: string;
   description: string;
   price: number | null; // null means "Contact for Price"
+  contactForPrice?: boolean;
   availability: 'In Stock' | 'Available on Order' | 'Out of Stock';
   featured: boolean;
   isNewArrival?: boolean;
@@ -153,4 +154,6 @@ export interface BlogArticle {
   author: string;
   image: string;
   keyTakeaways: string[];
+  isPublished?: boolean;
+  createdAt?: string;
 }

@@ -18,8 +18,8 @@ import {
   useTransform,
   type SpringOptions,
   AnimatePresence,
-} from 'framer-motion';
-import { cn } from '@/lib/utils';
+} from 'motion/react';
+import { cn } from '../../lib/utils';
 
 const DOCK_HEIGHT = 128;
 const DEFAULT_MAGNIFICATION = 80;
