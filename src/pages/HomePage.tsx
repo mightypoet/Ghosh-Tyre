@@ -2,87 +2,128 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowRight,
-  Award,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Headphones,
-  MessageCircle,
-  Phone,
+  Clock,
+  Compass,
+  MapPin,
   Search,
   ShieldCheck,
+  Sparkles,
   Wrench,
+  Zap,
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { BUSINESS_INFO, VERIFIED_BRANDS } from '../data/initialData';
-import { ProductArtwork } from '../components/ProductArtwork';
 import { ProductCard } from '../components/ProductCard';
-import { getWhatsAppUrl } from '../utils/whatsapp';
+import { BookCallButton } from '../components/ui/book-a-call-button';
+import { cn } from '../lib/utils';
 
-const HERO_SLIDES = [
+const PRIMARY_OPERATIONS = [
   {
     id: 1,
-    kicker: 'TRUSTED TYRE & BATTERY EXPERTS IN KOLKATA',
-    headline: 'PREMIUM TYRES FOR EVERY JOURNEY',
-    subtitle:
-      'Trusted Tyre & Battery Experts in Kolkata. Discover genuine products, professional installation and complete wheel care solutions for every vehicle.',
+    tag: 'Primary Operation 01 · Multi-Brand Tyres',
+    title: 'Genuine Passenger & Commercial Tyres',
+    sentence:
+      'Authorized Kolkata dealer for Michelin, Bridgestone, Yokohama, CEAT, MRF & Apollo offering genuine tyres with automated rim-safe mounting, dynamic balancing, and nitrogen inflation.',
     image: '/assets/aistudio/image_6aa2fd52.png',
-    exploreLink: '/category/tyres',
+    actionText: 'Explore Tyres',
+    actionLink: '/products/car?category=tyres',
+    secondaryText: 'Enquire Pricing',
   },
   {
     id: 2,
-    kicker: 'HIGH-CRANKING ZERO-MAINTENANCE POWER',
-    headline: 'POWER YOUR JOURNEY WITH GENUINE BATTERIES',
-    subtitle:
-      'Authorized range of fresh car, SUV, two-wheeler and commercial vehicle batteries with computerized alternator testing and instant fitment.',
+    tag: 'Primary Operation 02 · Automotive Batteries',
+    title: 'Certified Battery Sales & Health Testing',
+    sentence:
+      'Authorized dealership for Amaron and Exide maintenance-free batteries featuring free computerized cranking health diagnostics, alternator testing, and instant doorstep or workshop fitment.',
     image: '/assets/aistudio/image_f3b889b3.png',
-    exploreLink: '/category/batteries',
+    actionText: 'View Batteries',
+    actionLink: '/category/batteries',
+    secondaryText: 'Check Battery Health',
   },
   {
     id: 3,
-    kicker: '38C RAJA DINENDRA STREET · KOLKATA',
-    headline: 'COMPLETE WHEEL CARE & AUTOMOTIVE SOLUTIONS',
-    subtitle:
-      'Precision wheel alignment, dynamic balancing, alloy wheels, car AC servicing, sun control films and Sonax ceramic coating under one roof.',
+    tag: 'Primary Operation 03 · 3D Wheel Alignment',
+    title: 'Precision 3D Laser Wheel Alignment',
+    sentence:
+      'Multi-camera computerized 3D laser alignment and high-speed dynamic wheel balancing at 38C Raja Dinendra Street to eliminate steering pull, prevent vibration, and maximize tyre lifespan.',
     image: '/assets/aistudio/image_8a83cfc1.png',
-    exploreLink: '/services',
+    actionText: 'Book Alignment',
+    actionLink: '/services',
+    secondaryText: 'Explore Services',
   },
 ];
 
-const PRODUCT_FILTER_TABS = [
-  { label: 'ALL', value: 'all' },
-  { label: 'AUDIO', value: 'audio' },
-  { label: 'DETAILING', value: 'detailing' },
-  { label: 'INTERIOR', value: 'interior' },
-  { label: 'EXTERIOR', value: 'exterior' },
-  { label: 'ALLOY WHEELS', value: 'alloy-wheels' },
-  { label: 'PARTS', value: 'parts' },
-  { label: 'BATTERIES', value: 'batteries' },
-  { label: 'SERVICES', value: 'services' },
-  { label: 'TYRES', value: 'tyres' },
-  { label: 'TOOLS', value: 'tools' },
+const BRAND_CARD_IMAGES: Record<string, string> = {
+  Michelin: '/assets/aistudio/image_86fa9fc9.png',
+  Bridgestone: '/assets/aistudio/image_7e716995.png',
+  Goodyear: '/assets/aistudio/image_ce1587b8.png',
+  Apollo: '/assets/aistudio/image_ee93d504.png',
+  CEAT: '/assets/aistudio/image_3e0e705f.png',
+  MRF: '/assets/aistudio/image_5b1e3202.png',
+  'JK Tyre': '/assets/aistudio/image_4d9b69d2.png',
+  Exide: '/assets/aistudio/PngItem_3582603_0aeb6400.png',
+};
+
+const QUICK_CATEGORY_CARDS = [
+  {
+    title: 'Car & SUV Tyres',
+    desc: 'High-grip tubeless tyres from Michelin, Bridgestone, Yokohama & CEAT.',
+    path: '/products/car?category=tyres',
+    tag: 'Car / SUV',
+  },
+  {
+    title: 'Two-Wheeler Tyres',
+    desc: 'Commuter, sport & cruiser tyres from MRF, CEAT & Michelin.',
+    path: '/products/two-wheelers?category=tyres',
+    tag: 'Bike / Scooter',
+  },
+  {
+    title: 'Automotive Batteries',
+    desc: 'Maintenance-free Amaron & Exide batteries with on-spot digital testing.',
+    path: '/category/batteries',
+    tag: '4-Wheeler & 2-Wheeler',
+  },
+  {
+    title: 'Alloy Wheels & Care',
+    desc: 'Precision PCD alloys, ceramic coatings, car AC & detailing.',
+    path: '/category/alloy-wheels',
+    tag: 'Custom Alloys',
+  },
+];
+
+const FILTER_TABS = [
+  { label: 'All Products', value: 'all' },
+  { label: 'Tyres', value: 'tyres' },
+  { label: 'Batteries', value: 'batteries' },
+  { label: 'Alloy Wheels', value: 'alloy-wheels' },
+  { label: 'Accessories', value: 'accessories' },
 ];
 
 export const HomePage: React.FC = () => {
-  const {
-    products,
-    categories,
-    banners,
-    services,
-    openServiceEnquiryModal,
-  } = useStore();
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const { products, openServiceEnquiryModal } = useStore();
+  const [activeSlide, setActiveSlide] = useState(0);
   const [searchInput, setSearchInput] = useState('');
-  const [activeProductTab, setActiveProductTab] = useState('all');
+  const [activeTab, setActiveTab] = useState('all');
   const navigate = useNavigate();
 
-  // Automatic Hero Slider rotation
+  // Automatic rotation between the 3 images every 7 seconds
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 6000);
+      setActiveSlide((prev) => (prev + 1) % PRIMARY_OPERATIONS.length);
+    }, 7000);
     return () => clearInterval(timer);
   }, []);
+
+  const handleNextSlide = () => {
+    setActiveSlide((prev) => (prev + 1) % PRIMARY_OPERATIONS.length);
+  };
+
+  const handlePrevSlide = () => {
+    setActiveSlide((prev) => (prev - 1 + PRIMARY_OPERATIONS.length) % PRIMARY_OPERATIONS.length);
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,521 +134,403 @@ export const HomePage: React.FC = () => {
     }
   };
 
-  const homeCircleCategories = categories.filter((c) => c.featuredOnHome).slice(0, 6);
-  const promoCards = banners.filter((b) => b.slot.startsWith('promo-'));
-  const collectionBanners = banners.filter((b) => b.slot.startsWith('collection-'));
-
   const filteredProducts =
-    activeProductTab === 'all'
+    activeTab === 'all'
       ? products.slice(0, 8)
-      : activeProductTab === 'services'
-      ? products.filter((p) => p.categorySlug === 'detailing' || p.categorySlug === 'exterior')
-      : products.filter((p) => p.categorySlug === activeProductTab);
+      : products.filter((p) => p.categorySlug === activeTab).slice(0, 8);
 
-  const slide = HERO_SLIDES[currentSlide];
+  const currentOperation = PRIMARY_OPERATIONS[activeSlide];
 
   return (
-    <div className="min-h-screen bg-[#14151B]">
-      {/* SECTION 1: HERO BANNER SLIDER */}
-      <section className="relative w-full min-h-[520px] lg:min-h-[600px] flex items-center justify-center overflow-hidden border-b border-white/10">
-        {/* Background Slide Image with Measured Dark Scrim */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src={slide.image}
-            alt={slide.headline}
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-cover object-center scale-105 transition-all duration-700"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#14151B] via-[#14151B]/80 to-[#14151B]/65" />
-          <div className="absolute inset-0 bg-radial from-transparent via-black/40 to-black/85" />
-        </div>
+    <div className="min-h-screen bg-[#14151B] text-white">
+      {/* 1. HERO SECTION: 3-Image Interactive Primary Operations Showcase */}
+      <section className="relative overflow-hidden border-b border-white/10 bg-gradient-to-b from-[#1A1C24] via-[#14151B] to-[#14151B]">
+        {/* Ambient Glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-[#F10D17]/10 blur-[120px] pointer-events-none rounded-full" />
 
-        {/* Left / Right Slider Arrows */}
-        <button
-          type="button"
-          onClick={() =>
-            setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)
-          }
-          aria-label="Previous Slide"
-          className="absolute left-4 sm:left-8 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-[#F10D17] border border-white/20 flex items-center justify-center text-white transition-colors cursor-pointer"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length)}
-          aria-label="Next Slide"
-          className="absolute right-4 sm:right-8 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-[#F10D17] border border-white/20 flex items-center justify-center text-white transition-colors cursor-pointer"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
-
-        {/* Hero Center Content matching Reference Screenshot */}
-        <div className="relative z-10 max-w-4xl mx-auto px-6 py-16 text-center space-y-5">
-          <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.25em] text-[#E2E4EA]">
-            {slide.kicker}
-          </p>
-          <h1
-            className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white uppercase tracking-tight leading-[1.08]"
-            style={{ textWrap: 'balance' }}
-          >
-            {slide.headline}
-          </h1>
-          <p className="text-sm sm:text-base text-[#D1D5DB] max-w-2xl mx-auto leading-relaxed">
-            {slide.subtitle}
-          </p>
-
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
-            <Link
-              to={slide.exploreLink}
-              className="inline-flex items-center gap-3 pl-6 pr-3 py-3 rounded-full bg-[#F10D17] hover:bg-[#d10b14] text-white text-xs font-bold uppercase tracking-wider shadow-lg shadow-[#F10D17]/25 transition-all"
-            >
-              <span>Explore Products</span>
-              <span className="w-7 h-7 rounded-full bg-black/35 flex items-center justify-center">
-                <ChevronRight className="w-4 h-4" />
-              </span>
-            </Link>
-
-            <button
-              type="button"
-              onClick={() => openServiceEnquiryModal('General Tyre, Battery & Wheel Care Enquiry')}
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#1C1D24]/90 hover:bg-white/15 border border-white/25 text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
-            >
-              <span>Enquire Now</span>
-            </button>
-          </div>
-
-          {/* Slide Indicators */}
-          <div className="pt-6 flex items-center justify-center gap-2.5">
-            {HERO_SLIDES.map((s, idx) => (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => setCurrentSlide(idx)}
-                aria-label={`Go to slide ${idx + 1}`}
-                className={`h-2.5 rounded-full transition-all cursor-pointer ${
-                  idx === currentSlide ? 'w-7 bg-[#F10D17]' : 'w-2.5 bg-white/35 hover:bg-white/60'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 2: PROMINENT PRODUCT SEARCH BAR (Exact Reference Style) */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 -mt-8 relative z-20">
-        <div className="bg-[#1C1D24] border border-white/15 rounded-xl p-3 sm:p-4 shadow-2xl">
-          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
-            <div className="relative flex-1">
-              <Search className="w-4 h-4 text-gray-500 absolute left-4 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Search tyres, batteries, wheels, accessories or products..."
-                className="w-full bg-white text-[#14151B] placeholder-gray-500 rounded-lg pl-11 pr-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#F10D17]"
-              />
+        <div className="relative max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
+          {/* Top Location & Dealer Kicker */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pb-6 border-b border-white/10 mb-8">
+            <div className="inline-flex items-center gap-2 text-xs font-medium text-[#B8BBC4]">
+              <MapPin className="w-4 h-4 text-[#F10D17]" />
+              <span className="font-semibold text-white">38C Raja Dinendra Street, Garpar, Kolkata 700009</span>
+              <span className="hidden md:inline text-white/30">|</span>
+              <span className="hidden md:inline text-[#B8BBC4]">Near Rajabazar / Machuabazar</span>
             </div>
-            <button
-              type="submit"
-              className="px-10 py-3 bg-[#F10D17] hover:bg-[#d10b14] text-white font-display text-sm font-bold uppercase tracking-wider rounded-lg transition-colors cursor-pointer shrink-0"
-            >
-              SEARCH
-            </button>
-          </form>
-        </div>
-      </section>
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#F10D17]/15 border border-[#F10D17]/30 text-[#F10D17] text-[11px] font-bold uppercase tracking-wider">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Authorized Multi-Brand Hub</span>
+              </span>
+            </div>
+          </div>
 
-      {/* SECTION 3: SHOP BY CATEGORY (6 Circular Categories Inspired by Screenshot) */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8">
-          {homeCircleCategories.map((cat) => (
-            <Link
-              key={cat.id}
-              to={cat.slug === 'services' ? '/services' : `/category/${cat.slug}`}
-              className="group flex flex-col items-center text-center"
-            >
-              <div className="w-36 h-36 sm:w-40 sm:h-40 rounded-full p-2 border-2 border-white/80 group-hover:border-[#F10D17] bg-[#14151B] transition-all duration-300 group-hover:scale-105 shadow-xl">
-                <ProductArtwork
-                  visualType={cat.visualType}
-                  name={cat.name}
-                  variant="circle"
-                  className="w-full h-full rounded-full"
-                />
-              </div>
-              <h3 className="mt-4 font-display text-lg font-bold text-white group-hover:text-[#F10D17] tracking-wide transition-colors">
-                {cat.shortName}
-              </h3>
-            </Link>
-          ))}
-        </div>
-
-        <div className="mt-10 text-center">
-          <Link
-            to="/products"
-            className="inline-flex items-center gap-3 pl-6 pr-2.5 py-2.5 rounded-full bg-[#F10D17] hover:bg-[#d10b14] text-white text-xs font-bold uppercase tracking-wider transition-all"
-          >
-            <span>VIEW ALL CATEGORIES</span>
-            <span className="w-6 h-6 rounded-full bg-black/40 flex items-center justify-center">
-              <ChevronRight className="w-3.5 h-3.5" />
-            </span>
-          </Link>
-        </div>
-      </section>
-
-      {/* SECTION 4: PROMOTIONAL BANNERS (3 Cards: CAR AC SERVICE, TYRE SERVICE, SONAX CERAMIC COATING) */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {promoCards.map((banner) => (
-            <div
-              key={banner.id}
-              className="group relative h-56 rounded-xl overflow-hidden border border-white/15 bg-[#1C1D24] flex flex-col items-center justify-center text-center p-6"
-            >
+          {/* MAIN 3-IMAGE INTERACTIVE SHOWCASE */}
+          <div className="relative rounded-2xl overflow-hidden border border-white/15 bg-[#1C1D24] shadow-2xl">
+            {/* The Active Operation Image with Dark Scrim */}
+            <div className="relative min-h-[420px] sm:min-h-[460px] lg:min-h-[480px] flex items-center">
               <img
-                src={banner.image}
-                alt={banner.title}
+                src={currentOperation.image}
+                alt={currentOperation.title}
                 referrerPolicy="no-referrer"
-                className="absolute inset-0 w-full h-full object-cover opacity-45 group-hover:scale-105 transition-transform duration-500"
+                className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-700 ease-out"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/40" />
-              <div className="relative z-10 space-y-2">
-                <span className="text-xs font-bold uppercase tracking-widest text-white/90 block">
-                  {banner.kicker}
-                </span>
-                <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#FACC15] uppercase tracking-wide">
-                  {banner.title}
-                </h3>
-                <p className="text-xs sm:text-sm font-medium text-white/90">{banner.subtitle}</p>
-                <div className="pt-2">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#14151B] via-[#14151B]/90 to-[#14151B]/60 lg:to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#14151B] via-transparent to-black/40" />
+
+              {/* Clickable Previous & Next Image Arrows */}
+              <button
+                type="button"
+                onClick={handlePrevSlide}
+                aria-label="Previous Primary Operation Image"
+                className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-[#14151B]/80 hover:bg-[#F10D17] border border-white/20 text-white flex items-center justify-center transition-all duration-200 cursor-pointer shadow-xl hover:scale-105"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleNextSlide}
+                aria-label="Next Primary Operation Image"
+                className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-[#14151B]/80 hover:bg-[#F10D17] border border-white/20 text-white flex items-center justify-center transition-all duration-200 cursor-pointer shadow-xl hover:scale-105"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+
+              {/* Information Content: Primary Operation Details with Only One Sentence */}
+              <div className="relative z-10 max-w-2xl px-8 sm:px-14 lg:px-16 py-12 space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F10D17]/20 border border-[#F10D17]/40 text-[#F10D17] text-xs font-bold uppercase tracking-wider">
+                  <span className="w-2 h-2 rounded-full bg-[#F10D17]" />
+                  <span>{currentOperation.tag}</span>
+                </div>
+
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold uppercase text-white tracking-tight leading-[1.1]">
+                  {currentOperation.title}
+                </h1>
+
+                {/* Single Concise Sentence */}
+                <p className="text-sm sm:text-base text-[#D1D5DB] leading-relaxed max-w-xl">
+                  {currentOperation.sentence}
+                </p>
+
+                {/* Interactive CTA Actions */}
+                <div className="pt-2 flex flex-wrap items-center gap-3">
+                  <Link
+                    to={currentOperation.actionLink}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#F10D17] hover:bg-[#d00b14] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-lg shadow-[#F10D17]/30"
+                  >
+                    <span>{currentOperation.actionText}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+
                   <button
                     type="button"
-                    onClick={() => openServiceEnquiryModal(banner.title)}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#F10D17] hover:bg-[#d10b14] text-white text-[11px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                    onClick={() => openServiceEnquiryModal(currentOperation.title)}
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
                   >
-                    <span>{banner.ctaText}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>{currentOperation.secondaryText}</span>
                   </button>
                 </div>
               </div>
+
+              {/* Clickable Dots to Change the Sequence Navigation */}
+              <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5 bg-[#14151B]/85 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 shadow-xl">
+                {PRIMARY_OPERATIONS.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActiveSlide(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    className={cn(
+                      'h-2.5 rounded-full transition-all duration-300 cursor-pointer',
+                      idx === activeSlide
+                        ? 'w-7 bg-[#F10D17] shadow-md shadow-[#F10D17]/50'
+                        : 'w-2.5 bg-white/40 hover:bg-white/70'
+                    )}
+                  />
+                ))}
+              </div>
             </div>
+          </div>
+
+          {/* Quick Product Search Bar directly below the 3-image showcase */}
+          <div className="mt-6 max-w-3xl mx-auto">
+            <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-[#B8BBC4] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  placeholder="Search tyre size (e.g. 185/65 R15, 205/55 R16), car model, or battery..."
+                  className="w-full bg-[#1C1D24] border border-white/15 rounded-xl pl-10 pr-4 py-3 text-xs sm:text-sm text-white placeholder-[#B8BBC4]/60 focus:outline-none focus:border-[#F10D17] transition-colors"
+                />
+              </div>
+              <button
+                type="submit"
+                className="px-6 py-3 rounded-xl bg-[#F10D17] hover:bg-[#d00b14] text-white text-xs font-bold uppercase tracking-wider transition-colors shrink-0 cursor-pointer shadow-lg shadow-[#F10D17]/25"
+              >
+                Search Products
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. CURATED CATEGORIES: Tidy 4-card grid */}
+      <section className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="flex items-end justify-between mb-8">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#F10D17]">
+              Explore by Vehicle
+            </span>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold uppercase text-white mt-1">
+              Shop by Category
+            </h2>
+          </div>
+          <Link
+            to="/products"
+            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-[#B8BBC4] hover:text-white transition-colors"
+          >
+            <span>Full Catalogue</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {QUICK_CATEGORY_CARDS.map((card) => (
+            <Link
+              key={card.title}
+              to={card.path}
+              className="group relative rounded-xl overflow-hidden bg-[#1C1D24] border border-white/10 hover:border-[#F10D17]/50 transition-all flex flex-col justify-between p-5 hover:-translate-y-1"
+            >
+              <div>
+                <div className="flex items-center justify-between text-xs text-[#B8BBC4] mb-3">
+                  <span className="px-2 py-0.5 rounded bg-white/5 text-[11px] font-medium text-[#F10D17]">
+                    {card.tag}
+                  </span>
+                  <ChevronRight className="w-4 h-4 text-[#B8BBC4] group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <h3 className="font-display text-lg font-bold text-white uppercase group-hover:text-[#F10D17] transition-colors">
+                  {card.title}
+                </h3>
+                <p className="mt-1.5 text-xs text-[#B8BBC4] leading-relaxed">
+                  {card.desc}
+                </p>
+              </div>
+
+              <div className="mt-6 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-semibold text-white">
+                <span>View Products</span>
+                <span className="text-[#F10D17] text-sm">→</span>
+              </div>
+            </Link>
           ))}
         </div>
       </section>
 
-      {/* SECTION 5: OUR PRODUCTS WITH HORIZONTAL CATEGORY FILTER TABS */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        {/* Framed Section Heading inspired by Reference Screenshot */}
-        <div className="flex items-center justify-center mb-8">
-          <div className="hidden sm:block h-px w-24 bg-white/15" />
-          <div className="px-6 py-2.5 border border-white/15 bg-[#1C1D24] rounded-md mx-3">
-            <h2 className="font-display text-xl sm:text-2xl font-bold text-white uppercase tracking-wider">
-              ★ OUR PRODUCTS ★
+      {/* 3. TRENDING PRODUCTS: Tidy & Clean product display */}
+      <section className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#F10D17]">
+              Popular in Kolkata
+            </span>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold uppercase text-white mt-1">
+              Featured Tyres & Batteries
             </h2>
           </div>
-          <div className="hidden sm:block h-px w-24 bg-white/15" />
-        </div>
 
-        {/* Horizontal Category Filter Tabs */}
-        <div className="flex items-center justify-start lg:justify-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
-          {PRODUCT_FILTER_TABS.map((tab) => {
-            const active = activeProductTab === tab.value;
-            return (
+          {/* Clean Segmented Filter Tabs */}
+          <div className="flex items-center gap-1.5 p-1 bg-[#1C1D24] rounded-lg border border-white/10 overflow-x-auto no-scrollbar">
+            {FILTER_TABS.map((tab) => (
               <button
                 key={tab.value}
                 type="button"
-                onClick={() => setActiveProductTab(tab.value)}
-                className={`px-3.5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                  active
-                    ? 'bg-[#F10D17] text-white'
-                    : 'bg-[#1C1D24] text-[#B8BBC4] hover:text-white border border-white/10'
+                onClick={() => setActiveTab(tab.value)}
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                  activeTab === tab.value
+                    ? 'bg-[#F10D17] text-white shadow-sm'
+                    : 'text-[#B8BBC4] hover:text-white'
                 }`}
               >
                 {tab.label}
               </button>
-            );
-          })}
+            ))}
+          </div>
         </div>
 
         {/* Product Grid */}
-        {filteredProducts.length === 0 ? (
-          <div className="text-center py-12 bg-[#1C1D24] rounded-xl border border-white/10">
-            <p className="text-sm text-[#B8BBC4]">
-              No products currently filtered under this tab. Explore our full product catalogue.
-            </p>
-            <button
-              type="button"
-              onClick={() => setActiveProductTab('all')}
-              className="mt-4 px-5 py-2 rounded-lg bg-[#F10D17] text-white text-xs font-bold uppercase"
-            >
-              Show All Products
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {filteredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
 
         <div className="mt-10 text-center">
           <Link
             to="/products"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg bg-[#1C1D24] hover:bg-white/10 border border-white/20 text-white text-xs font-bold uppercase tracking-wider transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#1C1D24] hover:bg-white/10 border border-white/15 text-white text-xs font-bold uppercase tracking-wider transition-colors"
           >
-            <span>Explore Complete Product Catalogue ({products.length} Products)</span>
-            <ArrowRight className="w-4 h-4 text-[#F10D17]" />
+            <span>Explore All {products.length} Products</span>
+            <ArrowRight className="w-3.5 h-3.5 text-[#F10D17]" />
           </Link>
         </div>
       </section>
 
-      {/* SECTION 6: SIDE-BY-SIDE PROMOTIONAL COLLECTION BANNERS */}
-      <section className="w-full grid grid-cols-1 lg:grid-cols-2 border-y border-white/10">
-        {collectionBanners.map((col, idx) => (
-          <div
-            key={col.id}
-            className={`relative min-h-[340px] flex items-center justify-center text-center p-8 sm:p-14 overflow-hidden ${
-              idx === 0 ? 'border-b lg:border-b-0 lg:border-r border-white/10' : ''
-            }`}
-          >
-            <img
-              src={col.image}
-              alt={col.title}
-              referrerPolicy="no-referrer"
-              className="absolute inset-0 w-full h-full object-cover opacity-30"
-            />
-            <div
-              className={`absolute inset-0 ${
-                idx === 0
-                  ? 'bg-gradient-to-br from-[#2E1035]/90 via-[#14151B]/85 to-[#14151B]/95'
-                  : 'bg-gradient-to-br from-[#172554]/90 via-[#14151B]/85 to-[#14151B]/95'
-              }`}
-            />
-            <div className="relative z-10 max-w-lg space-y-3">
-              <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-white">
-                {col.kicker}
-              </span>
-              <h3 className="font-display text-3xl sm:text-4xl font-bold text-[#FACC15] uppercase tracking-wide">
-                {col.title}
-              </h3>
-              <p className="text-xs sm:text-sm text-[#D1D5DB] leading-relaxed">{col.subtitle}</p>
-              <div className="pt-3">
-                <Link
-                  to={col.ctaLink}
-                  className="inline-flex items-center gap-3 pl-6 pr-2.5 py-2.5 rounded-full bg-[#F10D17] hover:bg-[#d10b14] text-white text-xs font-bold uppercase tracking-wider transition-all"
-                >
-                  <span>{col.ctaText}</span>
-                  <span className="w-6 h-6 rounded-full bg-black/40 flex items-center justify-center">
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </span>
-                </Link>
+      {/* 4. WORKSHOP SERVICES: High-Value Wheel Care */}
+      <section className="bg-[#181920] border-y border-white/10 py-16 my-8">
+        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#F10D17]">
+              Professional Workshop Services
+            </span>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold uppercase text-white mt-1">
+              Precision Wheel Care & Maintenance
+            </h2>
+            <p className="mt-2 text-xs sm:text-sm text-[#B8BBC4]">
+              Equipped with computerized Italian tyre changers, digital wheel balancers, and multi-camera 3D wheel alignment systems.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-6 rounded-xl bg-[#14151B] border border-white/10 flex flex-col justify-between">
+              <div>
+                <div className="w-10 h-10 rounded-lg bg-[#F10D17]/15 text-[#F10D17] flex items-center justify-center mb-4">
+                  <Compass className="w-5 h-5" />
+                </div>
+                <h3 className="font-display text-lg font-bold uppercase text-white">
+                  3D Laser Wheel Alignment
+                </h3>
+                <p className="mt-2 text-xs text-[#B8BBC4] leading-relaxed">
+                  Corrects vehicle pulling, steering off-center, and irregular tyre feathering. Crucial for Kolkata road conditions every 5,000 km.
+                </p>
               </div>
+              <button
+                type="button"
+                onClick={() => openServiceEnquiryModal('3D Wheel Alignment')}
+                className="mt-6 w-full py-2.5 rounded-lg bg-white/5 hover:bg-[#F10D17] text-white text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                Book Alignment
+              </button>
+            </div>
+
+            <div className="p-6 rounded-xl bg-[#14151B] border border-white/10 flex flex-col justify-between">
+              <div>
+                <div className="w-10 h-10 rounded-lg bg-[#F10D17]/15 text-[#F10D17] flex items-center justify-center mb-4">
+                  <Wrench className="w-5 h-5" />
+                </div>
+                <h3 className="font-display text-lg font-bold uppercase text-white">
+                  Dynamic Wheel Balancing
+                </h3>
+                <p className="mt-2 text-xs text-[#B8BBC4] leading-relaxed">
+                  Eliminates high-speed steering wheel vibrations and ensures even tyre wear using computerized lead-free adhesive counterweights.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => openServiceEnquiryModal('Wheel Balancing')}
+                className="mt-6 w-full py-2.5 rounded-lg bg-white/5 hover:bg-[#F10D17] text-white text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                Book Balancing
+              </button>
+            </div>
+
+            <div className="p-6 rounded-xl bg-[#14151B] border border-white/10 flex flex-col justify-between">
+              <div>
+                <div className="w-10 h-10 rounded-lg bg-[#F10D17]/15 text-[#F10D17] flex items-center justify-center mb-4">
+                  <Zap className="w-5 h-5" />
+                </div>
+                <h3 className="font-display text-lg font-bold uppercase text-white">
+                  Battery Testing & Fitment
+                </h3>
+                <p className="mt-2 text-xs text-[#B8BBC4] leading-relaxed">
+                  Digital conductance tester evaluates cold-cranking amps (CCA) and alternator charging health. Free fitment and old battery exchange.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => openServiceEnquiryModal('Battery Test & Replacement')}
+                className="mt-6 w-full py-2.5 rounded-lg bg-white/5 hover:bg-[#F10D17] text-white text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                Enquire Battery
+              </button>
             </div>
           </div>
-        ))}
+        </div>
       </section>
 
-      {/* SECTION 7: FEATURED BRANDS CAROUSEL */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="flex items-center justify-center mb-10">
-          <div className="hidden sm:block h-px w-24 bg-white/15" />
-          <div className="px-6 py-2.5 border border-white/15 bg-[#1C1D24] rounded-md mx-3">
-            <h2 className="font-display text-xl sm:text-2xl font-bold text-white uppercase tracking-wider">
-              ★ FEATURED BRANDS ★
-            </h2>
-          </div>
-          <div className="hidden sm:block h-px w-24 bg-white/15" />
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-          {VERIFIED_BRANDS.map((brand) => (
+      {/* 5. AUTHORIZED BRANDS: Clean & Quiet */}
+      <section className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <p className="text-center text-xs font-bold uppercase tracking-widest text-[#B8BBC4] mb-6">
+          Authorized Dealer for India&apos;s Leading Brands
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+          {VERIFIED_BRANDS.slice(0, 8).map((b) => (
             <Link
-              key={brand.name}
-              to={`/products?brand=${encodeURIComponent(brand.name)}`}
-              className="group p-5 rounded-xl bg-[#1C1D24] border border-white/10 hover:border-[#F10D17]/60 flex flex-col items-center justify-center text-center transition-all hover:-translate-y-0.5"
+              key={b.name}
+              to={`/products?brand=${encodeURIComponent(b.name)}`}
+              className="relative overflow-hidden p-3 rounded-lg bg-[#1C1D24] border border-white/10 hover:border-white/20 text-center transition-colors group flex flex-col justify-center items-center min-h-[72px]"
             >
-              <span className="font-display text-xl font-bold text-white group-hover:text-[#F10D17] uppercase tracking-wider transition-colors">
-                {brand.name}
+              {BRAND_CARD_IMAGES[b.name] && (
+                <img
+                  src={BRAND_CARD_IMAGES[b.name]}
+                  alt={`${b.name} ${b.category}`}
+                  referrerPolicy="no-referrer"
+                  className="absolute inset-0 w-full h-full object-cover object-center opacity-30 pointer-events-none group-hover:scale-110 transition-transform duration-300"
+                />
+              )}
+              <span className="relative z-10 font-display text-sm font-bold uppercase text-white group-hover:text-[#F10D17] transition-colors block">
+                {b.name}
               </span>
-              <span className="mt-1 text-[11px] text-[#B8BBC4]">{brand.category}</span>
+              <span className="relative z-10 text-[10px] text-[#B8BBC4] block mt-0.5">{b.category}</span>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* SECTION 8: WHY CHOOSE US */}
-      <section className="bg-[#1C1D24] border-y border-white/10 py-16">
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#F10D17]">
-              THE GHOSH TYRE ZONE ADVANTAGE
-            </span>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-white uppercase mt-1">
-              WHY CHOOSE US
-            </h2>
-            <p className="text-sm text-[#B8BBC4] mt-2">
-              Serving vehicle owners across Kolkata with dependable automotive products and
-              precision workshop care.
+      {/* 6. LOCATION & STORE INFO: Concise, High-Value Local SEO */}
+      <section className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="rounded-2xl bg-[#1C1D24] border border-white/10 p-8 sm:p-10 lg:p-12 flex flex-col md:flex-row md:items-center justify-between gap-8 shadow-2xl">
+          <div className="space-y-4 max-w-2xl">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#F10D17]">
+              <Sparkles className="w-4 h-4" />
+              <span>Visit Our Authorized Kolkata Store</span>
+            </div>
+
+            <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold uppercase text-white tracking-wide leading-tight">
+              38C, Raja Dinendra Street, Garpar, Kolkata 700009
+            </h3>
+
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs sm:text-sm text-[#D1D5DB] pt-1">
+              <span className="flex items-center gap-2 text-white font-medium">
+                <Clock className="w-4 h-4 text-[#F10D17]" />
+                <span>Monday – Sunday: 9:30 AM – 8:30 PM</span>
+              </span>
+              <span className="hidden sm:inline text-white/20">·</span>
+              <span className="flex items-center gap-2 text-[#B8BBC4]">
+                <MapPin className="w-4 h-4 text-[#F10D17]" />
+                <span>Near Rajabazar / Machuabazar</span>
+              </span>
+            </div>
+
+            <p className="text-xs sm:text-sm text-[#B8BBC4] leading-relaxed max-w-xl pt-1">
+              Comprehensive tyre fitting, computerized 3D laser alignment, dynamic balancing, nitrogen inflation, and genuine battery installations while you wait.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 rounded-xl bg-[#14151B] border border-white/10 space-y-3">
-              <div className="w-12 h-12 rounded-lg bg-[#F10D17]/15 text-[#F10D17] flex items-center justify-center">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <h3 className="font-display text-lg font-bold text-white uppercase">
-                Genuine Products
-              </h3>
-              <p className="text-xs text-[#B8BBC4] leading-relaxed">
-                100% genuine tyres, maintenance-free batteries, alloy wheels, and accessories from
-                trusted manufacturers.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[#14151B] border border-white/10 space-y-3">
-              <div className="w-12 h-12 rounded-lg bg-[#F10D17]/15 text-[#F10D17] flex items-center justify-center">
-                <Headphones className="w-6 h-6" />
-              </div>
-              <h3 className="font-display text-lg font-bold text-white uppercase">
-                Expert Technical Support
-              </h3>
-              <p className="text-xs text-[#B8BBC4] leading-relaxed">
-                Accurate guidance on tyre load ratings, upsizing, battery Ampere-Hour capacity, and
-                vehicle compatibility.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[#14151B] border border-white/10 space-y-3">
-              <div className="w-12 h-12 rounded-lg bg-[#F10D17]/15 text-[#F10D17] flex items-center justify-center">
-                <Wrench className="w-6 h-6" />
-              </div>
-              <h3 className="font-display text-lg font-bold text-white uppercase">
-                Professional Installation
-              </h3>
-              <p className="text-xs text-[#B8BBC4] leading-relaxed">
-                Automated tyre mounting, computerized dynamic balancing, and clean electrical
-                fitment by trained technicians.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[#14151B] border border-white/10 space-y-3">
-              <div className="w-12 h-12 rounded-lg bg-[#F10D17]/15 text-[#F10D17] flex items-center justify-center">
-                <Award className="w-6 h-6" />
-              </div>
-              <h3 className="font-display text-lg font-bold text-white uppercase">
-                Complete Wheel Care Solutions
-              </h3>
-              <p className="text-xs text-[#B8BBC4] leading-relaxed">
-                From puncture repair and wheel alignment to car AC service and Sonax ceramic
-                protection at one destination.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 9: OUR SERVICES */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#F10D17]">
-              WORKSHOP CAPABILITIES
-            </span>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-white uppercase mt-1">
-              OUR SERVICES
-            </h2>
-          </div>
-          <Link
-            to="/services"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#F10D17] hover:text-white transition-colors"
-          >
-            <span>View Full Service Details</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service) => (
-            <div
-              key={service.id}
-              className="bg-[#22232B] border border-white/10 rounded-xl overflow-hidden flex flex-col justify-between hover:border-white/25 transition-all"
-            >
-              <div>
-                <ProductArtwork
-                  visualType={service.visualType}
-                  name={service.name}
-                  className="h-44 w-full"
-                />
-                <div className="p-5">
-                  <span className="text-[11px] text-[#B8BBC4] uppercase tracking-wider">
-                    Est. Time: {service.durationEstimate}
-                  </span>
-                  <h3 className="font-display text-lg font-bold text-white uppercase mt-1">
-                    {service.name}
-                  </h3>
-                  <p className="text-xs text-[#B8BBC4] mt-2 leading-relaxed line-clamp-3">
-                    {service.shortDescription}
-                  </p>
-                </div>
-              </div>
-              <div className="px-5 pb-5 pt-2 flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openServiceEnquiryModal(service.name)}
-                  className="flex-1 py-2.5 px-4 rounded-lg bg-[#F10D17] hover:bg-[#d10b14] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
-                >
-                  Enquire Now
-                </button>
-                <Link
-                  to={`/services#${service.slug}`}
-                  className="py-2.5 px-3 rounded-lg bg-[#14151B] hover:bg-white/10 border border-white/15 text-xs text-white font-medium"
-                >
-                  Details
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* SECTION 10: CUSTOMER ENQUIRY CTA */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#1C1D24] via-[#22232B] to-[#1C1D24] border border-white/15 p-8 sm:p-12 flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="space-y-3 max-w-2xl text-center lg:text-left">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#F10D17]">
-              <CheckCircle2 className="w-4 h-4" />
-              <span>EXPERT FITMENT CONSULTATION · KOLKATA</span>
-            </span>
-            <h2 className="font-display text-2xl sm:text-4xl font-bold text-white uppercase">
-              NEED HELP CHOOSING THE RIGHT PRODUCT?
-            </h2>
-            <p className="text-sm sm:text-base text-[#B8BBC4]">
-              Our automotive experts are here to help you find the right tyres, batteries and
-              accessories for your vehicle.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-4 shrink-0">
+          <div className="flex flex-wrap items-center gap-4 shrink-0">
+            <BookCallButton
+              onClick={() => openServiceEnquiryModal('Consultation Call with Ghosh Tyre Zone Expert')}
+              className="px-6 py-3 text-xs sm:text-sm"
+            />
             <a
-              href={`tel:${BUSINESS_INFO.phoneRaw}`}
-              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#F10D17] hover:bg-[#d10b14] text-white text-xs font-bold uppercase tracking-wider transition-colors"
-            >
-              <Phone className="w-4 h-4 fill-current" />
-              <span>CALL NOW ({BUSINESS_INFO.phoneDisplay})</span>
-            </a>
-
-            <a
-              href={getWhatsAppUrl(
-                'Hello Ghosh Tyre Zone, I need expert help choosing the right product for my vehicle.'
-              )}
+              href={`https://maps.google.com/?q=${encodeURIComponent('Ghosh Tyre Zone, 38C Raja Dinendra Street, Kolkata 700009')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#16A34A] hover:bg-[#15803D] text-white text-xs font-bold uppercase tracking-wider transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-semibold uppercase tracking-wider transition-colors"
             >
-              <MessageCircle className="w-4 h-4" />
-              <span>CHAT ON WHATSAPP</span>
+              <MapPin className="w-4 h-4 text-[#F10D17]" />
+              <span>Directions</span>
             </a>
           </div>
         </div>
