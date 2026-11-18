@@ -285,7 +285,6 @@ export const HomePage: React.FC = () => {
               Explore by Vehicle
             </span>
             <h2 className="font-display text-2xl sm:text-3xl font-bold uppercase text-white mt-1">
-              Shop by Category
             </h2>
           </div>
           <Link
